@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>System Admin Portfolio</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            width: 60%;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+            background: #3498db;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+
+    <h1 th:text="${name}"></h1>
+
+    <h2 th:text="${role}"></h2>
+
+    <h3>Skills</h3>
+
+    <p>
+        AWS EC2 | VPC | S3 | Load Balancer | ASG | CloudWatch | IAM |
+        Docker | GitLab | Jenkins | Linux/Unix | Shell Scripting |
+        Datadog | Production Support | Solaris
+    </p>
+
+    <br>
+
+    <a href="/status">Check Server Status</a>
+
+</div>
+
+</body>
+</html>
