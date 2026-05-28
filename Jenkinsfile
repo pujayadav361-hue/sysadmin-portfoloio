@@ -35,7 +35,9 @@ pipeline {
         stage('Deploy To Target Server') {
             steps {
                 sh """
-                scp -o StrictHostKeyChecking=no target/${JAR_NAME} ${APP_USER}@${APP_SERVER}:/home/${APP_USER}/
+                pwd
+                ls -lrt target/
+                scp -o StrictHostKeyChecking=no target/demo-0.0.1-SNAPSHOT.jar ${APP_USER}@${APP_SERVER}:/home/${APP_USER}/
                 """
             }
         }
