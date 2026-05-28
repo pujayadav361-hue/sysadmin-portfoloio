@@ -1,28 +1,38 @@
 pipeline {
     agent any
 
+    environment {
+        APP_NAME = "demo-0.0.1-SNAPSHOT.jar"
+        TARGET_SERVER = "18.60.39.70"
+        TARGET_PATH = "/root/"
+    }
+
     stages {
-        stage('Build') {
+
+        stage('Clone Code') {
             steps {
-                // Get some code from a GitHub repository
-                git 'https://github.com/pujayadav361-hue/sysadmin-portfoloio.git'
-
-                // Run the build on a Unix agent. You must have Maven installed.
-                sh 'mvn -Dmaven.test.failure.ignore=true clean package'
-
-                // To run Maven on a Windows agent, use
-                // bat 'mvn -Dmaven.test.failure.ignore=true clean package'
+                git branch: 'main',
+                url: 'https://github.com/pujayadav361-hue/sysadmin-portfoloio.git'
             }
+        }
 
-            post {
-                // If Maven was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
-                success {
-                    junit '**/target/Report/TEST-*.xml'
-                    archiveArtifacts 'target/*.jar'
-                }
+        stage('Build Application') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Deploy to Target Server') {
+            steps {
+                sh '''
+                scp target/$APP_NAME ec2-user@$TARGET_SERVER:$TARGET_PATH
+
+                ssh ec2-user@$TARGET_SERVER "
+                    pkill java || true
+                    nohup java -jar $TARGET_PATH/$APP_NAME > app.log 2>&1 &
+                "
+                '''
             }
         }
     }
 }
-
