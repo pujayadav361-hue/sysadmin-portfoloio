@@ -4,7 +4,7 @@ pipeline {
     environment {
         APP_NAME = "demo-0.0.1-SNAPSHOT.jar"
         TARGET_SERVER = "18.60.39.70"
-        TARGET_PATH = "/root/"
+        TARGET_PATH = "/home/ec2-user/"
     }
 
     stages {
