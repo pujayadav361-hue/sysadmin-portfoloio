@@ -55,6 +55,8 @@ pipeline {
                     sh 'docker push systemadmin-portfolio/demoapp:${buildNumber}'
             }
         }
+   }
+
 }
 
 
