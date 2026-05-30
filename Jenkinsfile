@@ -26,12 +26,16 @@ pipeline {
         }
     
         stage('install docker') {
-            steps() {
-                sh 'yum install docker -y'
+            steps {
+                sh '''
+                 sudo yum install docker -y
+                 sudo systemctl enable docker
+                 sudo systemctl start docker
+                '''
             }
         }
          stage('Build docker image') {
-          steps() {
+          steps {
                 sh 'docker build -t systemadmin-portfolio/demoapp:${buildnumber} .'
              }
           }  
