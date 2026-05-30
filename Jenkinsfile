@@ -53,9 +53,9 @@ pipeline {
                 withCredentials([string(credentialsId: 'pooja846', variable: 'Docker_hub_password')]) {
                     sh 'docker login -u pooja846 -p ${Docker_hub_password}'
                     sh 'docker push systemadmin-portfolio/demoapp:${buildNumber}'
-                }
             }
         }
+}
 
 
     post {
