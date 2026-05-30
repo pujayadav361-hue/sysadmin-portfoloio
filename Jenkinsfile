@@ -21,14 +21,14 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-       
-     #  stage('SonarQube Analysis') {
-     #       steps {
-     #               sh 'mvn sonar:sonar'
-     #          }
-     #      }
+     /*  
+       stage('SonarQube Analysis') {
+            steps {
+                    sh 'mvn sonar:sonar'
+               }
+           }
         
-        
+      */  
 
         stage('Build Docker Image') {
             steps {
