@@ -58,7 +58,7 @@ pipeline {
         }
 
 
-        stage('') {
+        stage("Push Docker Image to Docker Hub") {
             steps {
                 withCredentials([string(credentialsId: 'pooja846', variable: 'Docker_hub_password')]) {
                     sh 'docker login -u pooja846 -p ${Docker_hub_password}'
@@ -66,8 +66,17 @@ pipeline {
             }
         }
    }
-
-}
+  
+       stage("Pull docker image from server and start container") {
+            steps { 
+                 sh """
+                    ssh -o StrictHostKeyChecking=no ${APP_USER}@${APP_SERVER} '
+                         sudo docker run -t --name demoapp -p 8081:8080 systemadmin-portfolio/demoapp:${buildNumber}
+                      '
+                  """
+             }
+      }
+ }
 
 
     post {
