@@ -51,7 +51,7 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no ${APP_USER}@${APP_SERVER} '
                         sudo yum install -y docker &&
                         sudo systemctl enable docker &&
-                        sudo systemctl start docker &&
+                        sudo systemctl start docker 
                     '
                 """
             }
