@@ -1,10 +1,10 @@
 pipeline {
 
-    agent {
-        label "jenkins"
-    }
+    agent any
+     
+    
     environment {
-        APP_SERVER = '18.60.39.70'
+        APP_SERVER = '18.61.227.160'
         APP_USER = 'ec2-user'
         JAR_NAME = 'demo-0.0.1-SNAPSHOT.jar'
         buildNumber = "${BUILD_NUMBER}"
