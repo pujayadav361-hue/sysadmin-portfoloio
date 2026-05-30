@@ -1,5 +1,11 @@
 pipeline {
-    agent any
+  
+ agent {
+
+        label 'Jenkins'
+    }
+       
+ 
 
     environment {
         APP_SERVER = '18.61.227.160'
