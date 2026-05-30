@@ -29,10 +29,11 @@ pipeline {
       
         stage('Create docker image and push to docker hub') {
              steps {
-                 
-                 sh 'docker build -t systemadmin-portfolio/demoapp:${buildNumber} .'
+                 withCredentials([string(credentialsId: 'pooja846', variable: 'Docker_hub_password')]) {
+                 sh 'sudo docker build -t systemadmin-portfolio/demoapp:${buildNumber} .'
              }
         }
+}
         
         stage('Push docker image') {
             steps {
