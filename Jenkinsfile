@@ -71,8 +71,8 @@ pipeline {
             steps { 
                  sh """
                     ssh -o StrictHostKeyChecking=no ${APP_USER}@${APP_SERVER} '
-                         sudo docker pull systemadmin-portfolio/demoapp:${buildNumber}
-                         sudo docker run -t --name demoapp -p 8081:8080 systemadmin-portfolio/demoapp:${buildNumber}
+                         'sudo docker pull pooja846/demoapp:${buildNumber}'
+                         'sudo docker run -t --name demoapp -p 8081:8080 systemadmin-portfolio/demoapp:${buildNumber}'
                       '
                   """
              }
