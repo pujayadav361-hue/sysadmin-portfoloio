@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         APP_SERVER = '18.61.227.160'
-        APP_USER = 'ec2-user'
-        JAR_NAME = 'demo-0.0.1-SNAPSHOT.jar'
+        APP_USER   = 'ec2-user'
+        JAR_NAME   = 'demo-0.0.1-SNAPSHOT.jar'
         buildNumber = "${BUILD_NUMBER}"
     }
 
@@ -21,23 +21,13 @@ pipeline {
             }
         }
 
-        stage('Install Docker') {
-            steps {
-                sh '''
-                    sudo yum install docker -y
-                    sudo systemctl enable docker
-                    sudo systemctl start docker
-                '''
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t systemadmin-portfolio/demoapp:${buildNumber} .'
             }
         }
 
-        stage('Authenticate and Push Image to Docker Hub') {
+        stage('Push Image to Docker Hub') {
             steps {
                 withCredentials([string(credentialsId: 'pooja846', variable: 'Docker_hub_password')]) {
                     sh 'docker login -u pooja846 -p ${Docker_hub_password}'
@@ -46,9 +36,17 @@ pipeline {
             }
         }
 
-        stage("Deploy Application to Target Server") {
+        stage("Deploy to App Server") {
             steps {
-                sh "ssh -o StrictHostKeyChecking=no ${APP_USER}@${APP_SERVER} docker run -d --name demoapp-container -p 8081:8080 systemadmin-portfolio/demoapp:${buildNumber}"
+                sh """
+                    ssh -o StrictHostKeyChecking=no ${APP_USER}@${APP_SERVER} '
+                        sudo yum install -y docker &&
+                        sudo systemctl enable docker &&
+                        sudo systemctl start docker &&
+                        docker rm -f demoapp-container || true &&
+                        docker run -d --name demoapp-container -p 8081:8080 systemadmin-portfolio/demoapp:${buildNumber}
+                    '
+                """
             }
         }
     }
