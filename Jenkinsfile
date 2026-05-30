@@ -26,6 +26,21 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
+      
+        stage('Create docker image and push to docker hub') {
+             steps {
+                 sh 'docker build -t systemadmin-portfolio/demoapp:${buildNumber} .'
+             }
+        }
+        
+        stage('Push docker image') {
+            steps {
+                withCredentials([string(credentialsId: 'pooja846', variable: 'Docker_hub_password')]) {
+                    sh 'docker login -u pooja846 -p ${Docker_hub_password}'
+                    sh 'docker push systemadmin-portfolio/demoapp:${buildNumber}'
+                 }
+             }
+        }
         
         stage("Deploy to App Server") {
             steps {
@@ -34,21 +49,13 @@ pipeline {
                         sudo yum install -y docker &&
                         sudo systemctl enable docker &&
                         sudo systemctl start docker &&
-                        docker rm -f demoapp-container || true &&
-                        docker run -d --name demoapp-container -p 8081:8080 systemadmin-portfolio/demoapp:${buildNumber}
                     '
                 """
             }
         }
 
 
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t systemadmin-portfolio/demoapp:${buildNumber} .'
-            }
-        }
-
-        stage('Push Image to Docker Hub') {
+        stage('') {
             steps {
                 withCredentials([string(credentialsId: 'pooja846', variable: 'Docker_hub_password')]) {
                     sh 'docker login -u pooja846 -p ${Docker_hub_password}'
