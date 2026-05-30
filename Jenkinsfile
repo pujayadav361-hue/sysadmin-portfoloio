@@ -61,7 +61,7 @@ pipeline {
         stage("Push Docker Image to Docker Hub") {
             steps {
                 withCredentials([string(credentialsId: 'pooja846', variable: 'Docker_hub_password')]) {
-                    sh 'sudo docker login -u pooja846 -p ${Docker_hub_password}' &&
+                    sh 'sudo docker login -u pooja846 -p ${Docker_hub_password}' 
                     sh 'sudo docker push systemadmin-portfolio/demoapp:${buildNumber}'
             }
         }
