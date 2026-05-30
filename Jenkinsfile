@@ -29,6 +29,9 @@ pipeline {
       
         stage('Create docker image and push to docker hub') {
              steps {
+                 sh 'sudo usermod -aG docker jenkins'
+                 sh 'systemctl restart jenkins'
+                 
                  sh 'docker build -t systemadmin-portfolio/demoapp:${buildNumber} .'
              }
         }
