@@ -62,7 +62,6 @@ pipeline {
        stage("Pull docker image from server and start container") {
             steps { 
                  sh """
-                    ssh -o StrictHostKeyChecking=no ${APP_USER}@${APP_SERVER} '
                          'sudo docker pull pooja846/demoapp:${buildNumer}' &&
                 
                          'sudo docker run -t --name demoapp -p 8081:8080 pooja846/demoapp:${buildNumber}'
