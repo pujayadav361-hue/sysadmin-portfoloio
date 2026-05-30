@@ -24,17 +24,17 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${DOCKER_IMAGE}:${buildNumber} ."
-                sh "docker tag ${DOCKER_IMAGE}:${buildNumber} ${DOCKER_IMAGE}:latest"
+                sh  "sudo docker build -t ${DOCKER_IMAGE}:${buildNumber} ."
+                sh "sudo docker tag ${DOCKER_IMAGE}:${buildNumber} ${DOCKER_IMAGE}:latest"
             }
         }
 
         stage('Push Docker Image') {
             steps {
                 withCredentials([string(credentialsId: 'pooja846', variable: 'Docker_hub_password')]) {
-                    sh "docker login -u pooja846 -p ${Docker_hub_password}"
-                    sh "docker push ${DOCKER_IMAGE}:${buildNumber}"
-                    sh "docker push ${DOCKER_IMAGE}:latest"
+                    sh "sudo docker login -u pooja846 -p ${Docker_hub_password}"
+                    sh "sudo docker push ${DOCKER_IMAGE}:${buildNumber}"
+                    sh "sudo docker push ${DOCKER_IMAGE}:latest"
                 }
             }
         }
