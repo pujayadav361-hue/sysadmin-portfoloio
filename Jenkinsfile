@@ -26,6 +26,21 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
+        
+        stage("Deploy to App Server") {
+            steps {
+                sh """
+                    ssh -o StrictHostKeyChecking=no ${APP_USER}@${APP_SERVER} '
+                        sudo yum install -y docker &&
+                        sudo systemctl enable docker &&
+                        sudo systemctl start docker &&
+                        docker rm -f demoapp-container || true &&
+                        docker run -d --name demoapp-container -p 8081:8080 systemadmin-portfolio/demoapp:${buildNumber}
+                    '
+                """
+            }
+        }
+
 
         stage('Build Docker Image') {
             steps {
@@ -42,20 +57,6 @@ pipeline {
             }
         }
 
-        stage("Deploy to App Server") {
-            steps {
-                sh """
-                    ssh -o StrictHostKeyChecking=no ${APP_USER}@${APP_SERVER} '
-                        sudo yum install -y docker &&
-                        sudo systemctl enable docker &&
-                        sudo systemctl start docker &&
-                        docker rm -f demoapp-container || true &&
-                        docker run -d --name demoapp-container -p 8081:8080 systemadmin-portfolio/demoapp:${buildNumber}
-                    '
-                """
-            }
-        }
-    }
 
     post {
         always {
