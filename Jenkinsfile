@@ -39,7 +39,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'pooja846', variable: 'Docker_hub_password')]) {
                     sh 'sudo docker login -u pooja846 -p ${Docker_hub_password}'
-                    sh 'sudo docker tag systemadmin-portfolio/demoapp:${buildNumber} pooja846/demoapp:${buildNumber}'
+                    sh 'sudo docker tag systemadmin-portfolio/demoapp:${buildNumber} pooja846/demoapp:latest'
                     sh 'sudo docker push pooja846/demoapp:${buildNumber}'
                  }
              }
@@ -61,7 +61,7 @@ pipeline {
         stage("Push Docker Image to Docker Hub") {
             steps {
                 withCredentials([string(credentialsId: 'pooja846', variable: 'Docker_hub_password')]) {
-                    sh 'sudo docker login -u pooja846 -p ${Docker_hub_password}'
+                    sh 'sudo docker login -u pooja846 -p ${Docker_hub_password}' &&
                     sh 'sudo docker push systemadmin-portfolio/demoapp:${buildNumber}'
             }
         }
@@ -71,8 +71,9 @@ pipeline {
             steps { 
                  sh """
                     ssh -o StrictHostKeyChecking=no ${APP_USER}@${APP_SERVER} '
-                         'sudo docker pull pooja846/demoapp:${buildNumber}'
-                         'sudo docker run -t --name demoapp -p 8081:8080 systemadmin-portfolio/demoapp:${buildNumber}'
+                         'sudo docker pull pooja846/demoapp:latest' &&
+                
+                         'sudo docker run -t --name demoapp -p 8081:8080 systemadmin-portfolio/demoapp:latest'
                       '
                   """
              }
