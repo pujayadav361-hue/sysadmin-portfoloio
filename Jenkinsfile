@@ -51,7 +51,9 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no ${APP_USER}@${APP_SERVER} '
                         sudo yum install -y docker &&
                         sudo systemctl enable docker &&
-                        sudo systemctl start docker 
+                        sudo systemctl start docker &&
+                        sudo docker rm -f demoapp-container || true && 
+                        sudo docker ps -a 
                     '
                 """
             }
@@ -61,11 +63,9 @@ pipeline {
   
        stage("Pull docker image from server and start container") {
             steps { 
-                 sh """
-                         'sudo docker pull pooja846/demoapp:${buildNumer}' &&
-                
-                         'sudo docker run -t --name demoapp -p 8081:8080 pooja846/demoapp:${buildNumber}'
-                      '
+                  withCredentials([string(credentialsId: 'pooja846', variable: 'Docker_hub_password')]) {
+                         sh 'sudo docker pull pooja846/demoapp:${buildNumer}' 
+                         sh 'sudo docker run -d --name demoapp-container -p 8081:8080 pooja846/demoapp:${buildNumer}'
                   """
              }
       }
