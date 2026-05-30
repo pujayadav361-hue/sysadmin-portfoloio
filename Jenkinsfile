@@ -39,7 +39,8 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'pooja846', variable: 'Docker_hub_password')]) {
                     sh 'docker login -u pooja846 -p ${Docker_hub_password}'
-                    sh 'docker push systemadmin-portfolio/demoapp:${buildNumber}'
+                    sh 'docker tag systemadmin-portfolio/demoapp:${buildNumber} pooja846/demoapp:${buildNumber}'
+                    sh 'docker push pooja846/demoapp:${buildNumber}'
                  }
              }
         }
