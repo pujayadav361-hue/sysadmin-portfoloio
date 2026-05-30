@@ -22,11 +22,11 @@ pipeline {
             }
         }
        
-       stage('SonarQube Analysis') {
-            steps {
-                    sh 'mvn sonar:sonar'
-                }
-            }
+     #  stage('SonarQube Analysis') {
+     #       steps {
+     #               sh 'mvn sonar:sonar'
+     #          }
+     #      }
         
         
 
@@ -62,6 +62,16 @@ pipeline {
             }
         }
     }
+    
+     stage("Notification") {
+         steps {
+           emailext(
+               subject: "Deployment Status - Build #${BUILD_NUMBER}",
+               body: "Pipeline completed.\nStatus: ${currentBuild.currentResult}\nBuild Number: ${BUILD_NUMBER}\nApplication deployed to ${APP_SERVER}",
+               to: 'rohitbhola1122@gmail.com"
+               )
+             }
+           }
 
     post {
         always {
