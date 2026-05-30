@@ -17,30 +17,26 @@ pipeline{
         }      
      }
             
-        stage('build artifact')
-        {
+        stage('build artifact'){
           steps
           {
              sh 'mvn clean package'
           }
         }
     
-        stage('install docker')
-        {
+        stage('install docker'){
             steps()
             {
                 sh 'yum install docker -y'
             }
         }
-         stage('Build docker image')
-         {
+         stage('Build docker image'){
           steps()
              {
                 sh 'docker build -t systemadmin-portfolio/demoapp:${buildnumber} .'
              }
           }  
-          stage('Authenticate and push Image to Docker Hub')
-          {
+          stage('Authenticate and push Image to Docker Hub'){
            steps(){
                withCredentials([string(credentialsId: 'pooja846', variable: 'Docker_hub_password')])
                {
@@ -48,8 +44,7 @@ pipeline{
                 sh 'docker push systemadmin-portfolio/demoapp:${buildnumber}'
                }
            }
-           stage("Deploy Application to target server")
-           {
+           stage("Deploy Application to target server"){
              steps()
              {
                 
